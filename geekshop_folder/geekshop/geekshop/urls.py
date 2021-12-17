@@ -15,12 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from mainapp import views as mainapp_views     # приложение сайта, которое ещё переименовали
+from django.views.generic.base import RedirectView
+from mainapp import views as mainapp_views
+from django.conf import settings
+from django.conf.urls.static import static
+from django.conf.urls import include
 
 urlpatterns = [
-    path('', mainapp_views.main),
-    path('index/', mainapp_views.main),
-    path('products/', mainapp_views.products),    # первое это путь, второе это обработчик
-    path('contact/', mainapp_views.contact),
+    path('', RedirectView.as_view(url="/index", permanent=False)),
+    path('index/', mainapp_views.main, name = "index"),
+    path('products/', mainapp_views.products, name = "products"),
+    path('contact/', mainapp_views.contact, name = "contact"),
     path('admin/', admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

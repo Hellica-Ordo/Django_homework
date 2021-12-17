@@ -1,27 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
+{% extends "mainapp/base.html" %}
+
+	{% block 'title' %}
 	<title>Магазин</title>
-	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
-	<link rel="stylesheet" href="/static/fonts/font-awesome/css/font-awesome.css">
-</head>
-<body>
-	<div class="container">
+	{% endblock %}
+		{% block 'menu_class' %}
 		<div class="slider">
 			<div class="header clearfix">
-				<a href="index.html" class="logo"></a>
-				<ul class="menu">
-					<li><a href="/index" class="active">домой</a></li>
-					<li><a href="/products">продукты</a></li>
-					<li><a href="/contact">контакты</a></li>
-				</ul>
-				<a href="#" class="search"></a>
+		{% endblock %}
+			{% block 'divs' %}
 			</div>
+			{% endblock %}
+			{% block 'content' %}
 			<div class="text-slider">
 				<h3 class="green">тенденции</h3>
 				<h3 class="big"> удобные стулья</h3>
 				<p>Новый уровень комфорта. Отличные характеристики.</p>
+				<p>Более {{product_count}} моделей на {% now "Y"%} год. {{shop_slogan | title}}</p>
 				<a href="#" class="button-order">заказать <img src="/static/img/arrow.png" alt=""></a>
 			</div>	
 			<div class="navi">
@@ -37,57 +31,40 @@
 			<div class="clearfix">
 			</div>
 			<div class="tab-content">
-				<div class="block">
-					<a href="#"><img src="/static/img/product-1.jpg" alt="">
-						<div class="text">
-							<img src="/static/img/icon-hover.png" alt="img">
-							<h4>Отличный стул</h4>
-							<p>Расположитесь комфортно. </p>
-						</div> 
-					</a>
-				</div>
-				<div class="block">
-					<a href="#"><img src="/static/img/product-2.jpg" alt="">
-						<div class="text">
-							<img src="/static/img/icon-hover.png" alt="">
-							<h4>Стул повышенного качества</h4>
-							<p>Не оторваться. </p>
-						</div>
-					</a>
-				</div>	
+				{% for product in products %}
+ 					 <div class="block">
+    					<a href="#">
+      						<img src="/media/{{ product.image }}" width="250" height="250" alt="{{ product.short_desc }}">
+      						<div class="text">
+        						<h3>{{ product.category.name }}</h3>
+        						<h4>{{ product.name }}</h4>
+        						<p>{{ product.description }}</p>
+      						</div>
+    					</a>
+  					 </div>
+				{% endfor %}
+<!--				<div class="block">-->
+<!--					<a href="#"><img src="/static/img/product-1.jpg" alt="">-->
+<!--						<div class="text">-->
+<!--							<img src="/static/img/icon-hover.png" alt="img">-->
+<!--							<h4>Отличный стул</h4>-->
+<!--							<p>Расположитесь комфортно. </p>-->
+<!--						</div> -->
+<!--					</a>-->
+<!--				</div>-->
+<!--				<div class="block">-->
+<!--					<a href="#"><img src="/static/img/product-2.jpg" alt="">-->
+<!--						<div class="text">-->
+<!--							<img src="/static/img/icon-hover.png" alt="">-->
+<!--							<h4>Стул повышенного качества</h4>-->
+<!--							<p>Не оторваться. </p>-->
+<!--						</div>-->
+<!--					</a>-->
+<!--				</div>	-->
 			</div>
 		</div>
 		
 		<div class="clr"></div>
 
 	</div>
-
-    <div class="footer">
-        <div class="clearfix">
-            <div class="text-footer">
-                <h3>контакты</h3>
-            </div>
-            <div class="text-footer">
-                <h3>полезная информация</h3>
-            </div>
-            <div class="text-footer clearfix">
-                <h3>Оставайтесь на связи</h3>
-                <p>Подписаться на новости и рассылки</p>
-                <form>
-                    <input type="email" name="email" placeholder="ваш email">
-                    <a href="#"><i class="fa fa-paper-plane fa-2x" aria-hidden="true"></i></a>
-                </form>
-            </div>
-        </div>
-        <p class="small">&copy; GB 2017</p>
-        <div class="social">
-            <a href="#" class="social1"></a>
-            <a href="#" class="social2"></a>
-            <a href="#" class="social3"></a>
-            <a href="#" class="social4"></a>
-        </div>
-        <p class="small">Положения &amp; Условия  /  Конфиденциальность &amp; Cookies</p>
-    </div>	
-	
-</body>
-</html>
+		{% endblock %}
