@@ -1,0 +1,81 @@
+[
+  {
+    "category": "Кровати",
+    "name": "Мечта спартанца",
+    "price": 7990,
+    "short_desc": "Заветная мечта",
+    "description": "На месте спартанца вы бы тоже мечтали о такой.",
+    "quantity": 140,
+    "image": "products_images/bed_spartan.jpg"
+  },
+
+  {
+    "category": "Разное",
+    "name": "Кровать-качалка",
+    "price": 16800,
+    "short_desc": "Ворочайтесь аккуратнее",
+    "description": "Во избежание травм рекомендуем пристёгиваться!",
+    "quantity": 22,
+    "image": "products_images/round_bed.jpg"
+  },
+
+  {
+    "category": "Стулья",
+    "name": "Складной стул",
+    "price": 1745,
+    "short_desc": "Возьми с собой!",
+    "description": "Ждите в очереди с комфортом.",
+    "quantity": 354,
+    "image": "products_images/13034964.jpg"
+  },
+
+  {
+    "category": "Стулья",
+    "name": "Электрический стул",
+    "price": 4215,
+    "short_desc": "С подогревом.",
+    "description": "А вы о чём подумали?",
+    "quantity": 1775,
+    "image": "products_images/hotseat.jpg"
+  },
+
+  {
+    "category": "Стулья",
+    "name": "Офисный стул",
+    "price": 1224,
+    "short_desc": "Один-единственный.",
+    "description": "Один в комплекте.",
+    "quantity": 999,
+    "image": "products_images/office_chair.jpg"
+  },
+
+  {
+    "category": "Лампы",
+    "name": "Красная лампа",
+    "price": 544,
+    "short_desc": "Та самая.",
+    "description": "Кнопка в комплект не входит!",
+    "quantity": 1,
+    "image": "products_images/red_lamp.jpg"
+  },
+
+  {
+    "category": "Лампы",
+    "name": "Зелёная лампа",
+    "price": 9000,
+    "short_desc": "Старомодный шик.",
+    "description": "Очень старомодно, дорого и богато.",
+    "quantity": 1,
+    "image": "products_images/green_lamp.jpg"
+  },
+
+  {
+    "category": "Лампы",
+    "name": "Синяя лампа",
+    "price": 890,
+    "short_desc": "Очень синяя.",
+    "description": "Нет, она правда очень синяя.",
+    "quantity": 88,
+    "image": "products_images/green_lamp.jpg"
+  }
+]
