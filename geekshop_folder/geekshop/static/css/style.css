@@ -80,11 +80,13 @@ html, body {
 	top: 63px;
 	left: 1176px;
 }
-.basket {
+.menu .basket {
 	display: block;
 	width: 23px;
 	height: 23px;	
 	background-image: url(/static/img/basket.png);
+	margin-left: 10px;
+	padding-right: 0;
 	position: absolute;
 	top: 63px;
 	left: 1210px;
@@ -352,7 +354,7 @@ html, body {
 	margin-right: 15px;
 }
 .title h2 {
-	float: left;
+	float: center;
 	margin-top: 118px;
 	color:  #212121;
 	font-size: 36px;
@@ -1029,7 +1031,7 @@ td:first-child {
 }
 .related-products .block {
 	float: left;
-	margin-right: 30px;
+	margin: 15px;
 	display: block;
 	height: 370px;
 	width: 370px;

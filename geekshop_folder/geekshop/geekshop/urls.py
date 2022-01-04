@@ -24,8 +24,9 @@ from django.conf.urls import include
 urlpatterns = [
     path('', RedirectView.as_view(url="/index", permanent=False)),
     path('index/', mainapp_views.main, name = "index"),
-    path('products/', mainapp_views.products, name = "products"),
+    path('products/', include('mainapp.urls', namespace ='products'), name = 'products'),
     path('contact/', mainapp_views.contact, name = "contact"),
+    path('basket/', include('basketapp.urls', namespace='basket')),
     path('admin/', admin.site.urls),
     path('auth/', include('authapp.urls', namespace='auth'))
 ]
