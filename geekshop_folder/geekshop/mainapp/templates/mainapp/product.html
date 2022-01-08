@@ -1,0 +1,45 @@
+{% extends "mainapp/base.html" %}
+{%load static%}
+
+{% block 'title' %}
+<title>Каталог</title>
+{% endblock %}
+
+{% block 'menu_class' %}
+<div class="hero-white">
+    <div class="header clearfix">
+        {% endblock %}
+        {% block 'divs' %}
+    </div>
+</div>
+{% endblock %}
+{% block 'content' %}
+<div class="details">
+    <div class="links clearfix">
+        {% include 'mainapp/includes/inc_categories_menu.html' %}
+    </div>
+
+    <div class="details-products">
+        <div class="details-slider">
+            <div class="slider-product">
+                <img src="/media/{{ product.image }}" width=350px height=350px
+                     alt="{{ product.short_desc }}">
+            </div>
+
+            <div class="description">
+                <h3 class="big-bold">{{ product.name }}</h3>
+                <br>
+                <p class="price"> {{ product.price }} <span>руб</span></p>
+                <a href="{% url 'basket:add' product.pk %}" class="red-button">
+                    заказать
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </a>
+                <div class="description-text">
+                    {{ product.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clr"></div>
+{% endblock %}

@@ -9,22 +9,22 @@ class Basket(models.Model):
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
     add_datetime = models.DateTimeField(verbose_name='дата добавления', auto_now_add=True)
 
-    # оно вроде как работает, но общую стоимость считает неправильно
-    # количество товаров в корзине
-    @property
-    def item_count(self):
-        items_in_basket = Basket.objects.filter(user=self.user)
-        all_items_count = sum(list(map(lambda n: n.quantity, items_in_basket)))
-        return all_items_count
-
-    # стоимость товаров одного типа
     @property
     def product_cost(self):
-        return self.product.quantity * self.product.price
+        "return cost of all products this type"
+        return self.product.price * self.quantity
 
-    # стоимость всех товаров в корзине
     @property
-    def all_products_cost(self):
-        items_in_basket = Basket.objects.filter(user=self.user)
-        basket_cost = sum(list(map(lambda n: n.product_cost, items_in_basket)))
-        return basket_cost
+    def total_quantity(self):
+        "return total quantity for user"
+        _items = Basket.objects.filter(user=self.user)
+        _totalquantity = sum(list(map(lambda x: x.quantity, _items)))
+        return _totalquantity
+
+    @property
+    def total_cost(self):
+        "return total cost for user"
+        _items = Basket.objects.filter(user=self.user)
+        _totalcost = sum(list(map(lambda x: x.product_cost, _items)))
+        return _totalcost
+

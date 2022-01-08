@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from .models import ProductCategory, Product
 from basketapp.models import Basket
+from random import sample
 
-# Create your views here.
+#ссылки для главного меню сайта
 menu_links = [
     {"href": "index", "active_if": ["index"], "name": "Главная"},
     {
@@ -13,12 +14,31 @@ menu_links = [
     {"href": "contact", "active_if": ["contact"], "name": "Контакты"},
 ]
 
+#функция для вывода корзины, чтобы не писать в каждом рендере одно и то же
+def get_basket(user):
+    if user.is_authenticated:
+        return Basket.objects.filter(user=user)
+    else:
+        return []
 
+#вывод "горящего предложения" (с) перевод алиэкспресса
+def get_hot_product():
+    products = Product.objects.all()
+
+    return sample(list(products), 1)[0]
+
+#вывод похожих продуктов для горячего предложения
+def get_same_products(hot_product):
+    same_products = Product.objects.filter(category=hot_product.category). \
+                        exclude(pk=hot_product.pk)[:3]
+
+    return same_products
+
+
+# рендер главной страницы
 def main(request):
     title = 'Главная'
-    basket = []
-    if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
+    basket = get_basket(request.user)
 
     products = Product.objects.all()[:4]
 
@@ -31,17 +51,16 @@ def main(request):
         'basket': basket})
 
 
+#рендер каталога продуктов
 def products(request, pk=None):
     print(pk)
 
     title = 'Продукты'
     products_menu = ProductCategory.objects.all()
-    related_products = Product.objects.all()[:2] if not pk else Product.objects.filter(
-        category__id=pk)
-
-    basket = []
-    if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
+    related_products = Product.objects.all()[:2] if not pk else Product.objects.filter(category__id=pk)
+    basket = get_basket(request.user)
+    hot_product = get_hot_product()
+    same_products = get_same_products(hot_product)
 
     if pk is not None:
         if pk == 0:
@@ -57,6 +76,7 @@ def products(request, pk=None):
                                                                       'category': category,
                                                                       'products': products,
                                                                       'related_products': related_products,
+                                                                      'same_products': same_products,
                                                                       'basket': basket})
 
     else:
@@ -66,12 +86,28 @@ def products(request, pk=None):
                                                                  'menu_links': menu_links,
                                                                  'products_menu': products_menu,
                                                                  'same_products': same_products,
-                                                                 'basket': basket})
+                                                                 'basket': basket,
+                                                                 'hot_product': hot_product})
 
 
+#рендер страницы конкретного товара
+def product(request, pk):
+    title = 'продукты'
+
+    content = {
+        'title': title,
+        'products_menu': ProductCategory.objects.all(),
+        'product': get_object_or_404(Product, pk=pk),
+        'basket': get_basket(request.user),
+        "menu_links": menu_links,
+    }
+
+    return render(request, 'mainapp/product.html', content)
+
+
+#рендер страницы контактов
 def contact(request):
-    basket = []
-    if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
+    basket = get_basket(request.user)
+
     return render(request, 'mainapp/contact.html', context={"menu_links": menu_links,
                                                             'basket': basket})
