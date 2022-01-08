@@ -14,7 +14,7 @@ menu_links = [
     {"href": "contact", "active_if": ["contact"], "name": "Контакты"},
 ]
 
-#функция для вывода корзины, чтобы не писать в каждом рендере одно и то же
+#функция для вывода корзины, чтобы не писать в каждом контроллере одно и то же
 def get_basket(user):
     if user.is_authenticated:
         return Basket.objects.filter(user=user)
@@ -35,7 +35,7 @@ def get_same_products(hot_product):
     return same_products
 
 
-# рендер главной страницы
+#контроллер главной страницы
 def main(request):
     title = 'Главная'
     basket = get_basket(request.user)
@@ -51,7 +51,7 @@ def main(request):
         'basket': basket})
 
 
-#рендер каталога продуктов
+#контроллер каталога продуктов
 def products(request, pk=None):
     print(pk)
 
@@ -90,7 +90,7 @@ def products(request, pk=None):
                                                                  'hot_product': hot_product})
 
 
-#рендер страницы конкретного товара
+#контроллер страницы конкретного товара
 def product(request, pk):
     title = 'продукты'
 
@@ -105,7 +105,7 @@ def product(request, pk):
     return render(request, 'mainapp/product.html', content)
 
 
-#рендер страницы контактов
+#контроллер страницы контактов
 def contact(request):
     basket = get_basket(request.user)
 

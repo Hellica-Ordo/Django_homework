@@ -21,7 +21,7 @@ def login(request):
             if 'next' in request.POST.keys():
                 return HttpResponseRedirect(request.POST['next'])
             else:
-                return HttpResponseRedirect(reverse('main'))
+                return HttpResponseRedirect(reverse('index'))
 
     content = {'title': title,
                'login_form': login_form,
