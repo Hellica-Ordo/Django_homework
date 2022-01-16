@@ -12,5 +12,15 @@
         <br>
         <input class="form-control" type="submit" value="войти">
     </form>
+    <button class="btn btn-round form-control last">
+        <a href="{% url 'index' %}" class="">
+            На главную
+        </a>
+    </button>
+    <button class="btn btn-round form-control last">
+        <a href="{% url 'auth:register' %}" class="">
+            Регистрация
+        </a>
+    </button>
 
 {% endblock %}
