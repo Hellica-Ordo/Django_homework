@@ -1,18 +1,22 @@
 {% extends 'adminapp/base.html' %}
 {% load static %}
+{% load my_tags %}
 
 {% block content %}
-  <div class="products_list">
+
+  <div class="categories_list">
     <button class="new_product">
-      <a href={% url 'admin:product_create' category.pk %}>
+      <a href={% url 'admin:product_create' object_list.0.category.pk %}>
         Новый товар
       </a>
     </button>
-		
-    {% for object in objects %}
-      <div class="product_record">
-        <img 
-          src="/media/{{object.image|default:'products_images/default.jpg'}}"
+  </div>
+  <br>
+    {% for object in object_list %}
+    <div class="categories_list">
+        <img
+          src="{{object.image|media_folder_products}}"
+          width="150" height="150"
           alt="{{ object.name }}">
         <div class="product_name">
           {{ object.name|title }}
@@ -33,6 +37,11 @@
               Удалить
             </a>
           </button>
+          <button>
+            <a href={% url 'admin:categories' %}>
+              Назад
+            </a>
+          </button>
         </div>
         <div class="summary">
           <b>Цена</b>
@@ -41,9 +50,10 @@
           <p>{{ object.quantity }}</p>
         </div>
         <div class="product_desc">
-          {{ object.short_desc|title }}
+          {{ object.short_desc }}
         </div>
-      </div>
+      <br><br>
+    </div>
     {% endfor%}
-  </div>
+
 {% endblock %}

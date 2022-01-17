@@ -1219,7 +1219,7 @@ td:first-child {
 	display: block;
 }
 
-.products_list .title {
+.products_list .title .paginator {
     margin: 20px auto;
     height: 50px;
     float: none;

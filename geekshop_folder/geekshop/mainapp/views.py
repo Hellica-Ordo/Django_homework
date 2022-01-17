@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import ProductCategory, Product
 from basketapp.models import Basket
 from random import sample
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 #ссылки для главного меню сайта
 menu_links = [
@@ -52,9 +53,7 @@ def main(request):
 
 
 #контроллер каталога продуктов
-def products(request, pk=None):
-    print(pk)
-
+def products(request, pk=None, page=1):
     title = 'Продукты'
     products_menu = ProductCategory.objects.all()
     related_products = Product.objects.all()[:2] if not pk else Product.objects.filter(category__id=pk)
@@ -65,16 +64,24 @@ def products(request, pk=None):
     if pk is not None:
         if pk == 0:
             products = Product.objects.all().order_by('price')
-            category = {'name': 'Все'}
+            category = {'name': 'Все', 'pk':0}
         else:
             category = get_object_or_404(ProductCategory, pk=pk)
-            products = Product.objects.filter(category__pk=pk).order_by('price')
+            products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by('price')
+
+        paginator = Paginator(products, 2)
+        try:
+            products_paginator = paginator.page(page)
+        except PageNotAnInteger:
+            products_paginator = paginator.page(1)
+        except EmptyPage:
+            products_paginator = paginator.page(paginator.num_pages)
 
         return render(request, 'mainapp/products_list.html', context={'title': title,
                                                                       'menu_links': menu_links,
                                                                       'products_menu': products_menu,
                                                                       'category': category,
-                                                                      'products': products,
+                                                                      'products': products_paginator,
                                                                       'related_products': related_products,
                                                                       'same_products': same_products,
                                                                       'basket': basket})
@@ -92,7 +99,7 @@ def products(request, pk=None):
 
 #контроллер страницы конкретного товара
 def product(request, pk):
-    title = 'продукты'
+    title = 'Товар'
 
     content = {
         'title': title,

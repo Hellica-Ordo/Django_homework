@@ -4,14 +4,14 @@
 
 {% block content %}
   <div class="user_delete">
-    Вы уверены, что хотите удалить пользователя {{ user_to_delete.username }}
+    Вы уверены, что хотите удалить пользователя {{ object.username }}
     {% if user_to_delete.first_name %}
       ({{ user_to_delete.first_name|title }}</b>
       {% if user_to_delete.last_name %}
         {{ user_to_delete.last_name|title }}
       {% endif %})
     {% endif %}?
-    <form action="{% url 'admin:user_delete' user_to_delete.pk %}"
+    <form action="{% url 'admin:user_delete' object.pk %}"
           method="post">
       {% csrf_token %}
       <input class="btn btn-danger" type="submit" value="удалить">
