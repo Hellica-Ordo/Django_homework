@@ -1,0 +1,41 @@
+<a href="index.html" class="logo"></a>
+<ul class="menu">
+    {% for link in menu_links %}
+    <li><a href="{% url link.href %}"
+           {% if request.resolver_match.view_name in link.active_if %}
+           class="active"
+           {% endif %}">
+        {{ link.name }}
+        </a>
+    </li>
+    {% endfor %}
+    {% if user.is_authenticated %}
+    <li>
+        <a href="{% url 'auth:edit' %}">
+            {{ user.first_name|default:'Пользователь' }}
+        </a>
+    </li>
+    {% endif %}
+    <li>
+        <a href="{% url 'basket:view' %}">Корзина ({{basket.0.item_count}})</a>
+    </li>
+    <li>
+        {% if user.is_authenticated %}
+        <a href="{% url 'auth:logout' %}">Выйти</a>
+        {% else %}
+        <a href="{% url 'auth:login' %}">Войти</a>
+        {% endif %}
+    </li>
+
+</ul>
+    <a href="#" class="search"></a>
+    {% comment %}
+    <a href="{% url 'basket:view' %}" class="basket">
+        <span>
+            {% if basket %}
+            {{ basket|length }}
+            {{basket.0.item_count}}
+            {{basket.0.all_products_cost}}{% endif %}
+        </span>
+    </a>
+    {% endcomment %}
