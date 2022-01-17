@@ -27,7 +27,9 @@ urlpatterns = [
     path('products/', include('mainapp.urls', namespace ='products'), name = 'products'),
     path('contact/', mainapp_views.contact, name = "contact"),
     path('basket/', include('basketapp.urls', namespace='basket')),
-    path('admin/', admin.site.urls),
+    # админка из коробки (defaultadmin) и пользовательская (adminapp)
+    #path('defaultadmin/', admin.site.urls),
+    path('admin/', include('adminapp.urls', namespace='admin')),
     path('auth/', include('authapp.urls', namespace='auth'))
 ]
 

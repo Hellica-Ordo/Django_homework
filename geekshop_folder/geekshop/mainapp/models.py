@@ -3,8 +3,9 @@ from django.db import models
 # Create your models here.
 # условно класс=таблица в БД, переменные это столбцы таблицы, в атрибутах указываются свойства столбцов
 class ProductCategory(models.Model):
-    name = models.CharField(verbose_name='имя', max_length=64, unique=True)
-    description = models.TextField(verbose_name='описание', blank=True)
+    name = models.CharField(verbose_name='Название категории', max_length=64, unique=True)
+    description = models.TextField(verbose_name='Краткое описание', blank=True)
+    is_active = models.BooleanField(verbose_name='активна', default=True)
 
     def __str__(self):
         return self.name
