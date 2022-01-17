@@ -17,7 +17,13 @@
     </li>
     {% endif %}
     <li>
-        <a href="{% url 'basket:view' %}">Корзина ({{basket.0.item_count}})</a>
+        <a href="{% url 'basket:view' %}">
+            Корзина
+            {% if basket %}
+            ({{ basket.0.total_quantity }}):
+            {{ basket.0.total_cost|floatformat:0 }} руб
+            {% endif %}
+            </a>
     </li>
     <li>
         {% if user.is_authenticated %}
@@ -29,13 +35,12 @@
 
 </ul>
     <a href="#" class="search"></a>
-    {% comment %}
-    <a href="{% url 'basket:view' %}" class="basket">
-        <span>
-            {% if basket %}
-            {{ basket|length }}
-            {{basket.0.item_count}}
-            {{basket.0.all_products_cost}}{% endif %}
-        </span>
-    </a>
-    {% endcomment %}
+<!--    {% comment %}-->
+<!--    <a href="{% url 'basket:view' %}" class="basket">-->
+<!--        <span>-->
+<!--            {% if basket %}-->
+<!--      {{ basket.0.total_cost|floatformat:0 }} руб-->
+<!--      ({{ basket.0.total_quantity }} шт)-->
+<!--        </span>-->
+<!--    </a>-->
+<!--    {% endcomment %}-->

@@ -34,8 +34,8 @@
     <div class="tab-content">
         {% for product in products %}
         <div class="block">
-            <a href="#">
-                <img src="/media/{{ product.image }}" width="250" height="250"
+            <a href="{% url 'products:product' product.pk %}">
+                <img src="/media/{{ product.image }}" width="270" height="270"
                      alt="{{ product.short_desc }}">
                 <div class="text">
                     <img src="{% static 'img/icon-hover.png' %}" alt="hover">
