@@ -1,0 +1,18 @@
+{% load static %}
+
+<div class="links clearfix">
+    <ul class="links-menu">
+        {% for link in product_menu_links %}
+        <li><a href="{% url 'products:category' link.id %}"
+             {% if request.resolver_match.url_name == link.href %} class="active"{% endif %}>
+                {{link.name}}
+                </a>
+        </li>
+        {% endfor %}
+        <li><a href="{% url 'products:category' 0 %}"
+               {% if request.resolver_match.kwargs.pk == '0' %} class="active" {% endif %}>
+              Все товары
+            </a>
+        </li>
+    </ul>
+</div>
