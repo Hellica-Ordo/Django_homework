@@ -35,6 +35,7 @@
         <a href="{% url 'auth:logout' %}">Выйти</a>
         {% else %}
         <a href="{% url 'auth:login' %}">Войти</a>
+        <a href="{% url 'auth:register' %}">Регистрация</a>
         {% endif %}
     </li>
 
