@@ -30,7 +30,8 @@ urlpatterns = [
     # админка из коробки (defaultadmin) и пользовательская (adminapp)
     #path('defaultadmin/', admin.site.urls),
     path('admin/', include('adminapp.urls', namespace='admin')),
-    path('auth/', include('authapp.urls', namespace='auth'))
+    path('auth/', include('authapp.urls', namespace='auth')),
+    path('', include('social_django.urls', namespace='social'))
 ]
 
 if settings.DEBUG:
