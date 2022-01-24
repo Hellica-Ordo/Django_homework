@@ -78,6 +78,7 @@ class UserDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
+        # self.object.delete()
         self.object.is_active = False
         self.object.save()
 
