@@ -176,6 +176,12 @@ class ProductsListView(ListView):
     model = Product
     template_name = 'adminapp/products.html'
 
+    def get_queryset(self):
+        if self.kwargs['pk'] != 0:
+            return Product.objects.filter(category__id=self.kwargs['pk'])
+        else:
+            return Product.objects.all()
+
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
