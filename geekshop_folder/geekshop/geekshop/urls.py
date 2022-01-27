@@ -14,12 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.views.generic.base import RedirectView
 from mainapp import views as mainapp_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import include
+
 
 urlpatterns = [
     path('', RedirectView.as_view(url="/index", permanent=False)),
@@ -30,7 +31,9 @@ urlpatterns = [
     # админка из коробки (defaultadmin) и пользовательская (adminapp)
     #path('defaultadmin/', admin.site.urls),
     path('admin/', include('adminapp.urls', namespace='admin')),
-    path('auth/', include('authapp.urls', namespace='auth'))
+    path('auth/', include('authapp.urls', namespace='auth')),
+    path('', include('social_django.urls', namespace='social')),
+    re_path(r'^order/', include('ordersapp.urls', namespace='order'))
 ]
 
 if settings.DEBUG:

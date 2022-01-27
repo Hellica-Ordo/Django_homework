@@ -14,4 +14,4 @@ def media_folder_users(string):
 
     return f'{settings.MEDIA_URL}{string}'
 
-register.filter('media_folder_products', media_folder_products)
+register.filter('media_folder_products')
