@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 from .models import ProductCategory, Product
-from basketapp.models import Basket
 from random import sample
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
@@ -14,13 +13,6 @@ menu_links = [
     },
     {"href": "contact", "active_if": ["contact"], "name": "Контакты"},
 ]
-
-#функция для вывода корзины, чтобы не писать в каждом контроллере одно и то же
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.objects.filter(user=user)
-    else:
-        return []
 
 #вывод "горящего предложения" (с) перевод алиэкспресса
 def get_hot_product():
@@ -39,7 +31,6 @@ def get_same_products(hot_product):
 #контроллер главной страницы
 def main(request):
     title = 'Главная'
-    basket = get_basket(request.user)
 
     products = Product.objects.all()[:4]
 
@@ -48,8 +39,7 @@ def main(request):
         "product_count": "9000",
         "shop_slogan": "лучшее для вас!",
         'title': title,
-        'products': products,
-        'basket': basket})
+        'products': products})
 
 
 #контроллер каталога продуктов
@@ -57,7 +47,6 @@ def products(request, pk=None, page=1):
     title = 'Продукты'
     products_menu = ProductCategory.objects.all()
     related_products = Product.objects.all()[:2] if not pk else Product.objects.filter(category__id=pk)
-    basket = get_basket(request.user)
     hot_product = get_hot_product()
     same_products = get_same_products(hot_product)
 
@@ -83,8 +72,7 @@ def products(request, pk=None, page=1):
                                                                       'category': category,
                                                                       'products': products_paginator,
                                                                       'related_products': related_products,
-                                                                      'same_products': same_products,
-                                                                      'basket': basket})
+                                                                      'same_products': same_products})
 
     else:
         same_products = Product.objects.all()[:3]
@@ -93,7 +81,6 @@ def products(request, pk=None, page=1):
                                                                  'menu_links': menu_links,
                                                                  'products_menu': products_menu,
                                                                  'same_products': same_products,
-                                                                 'basket': basket,
                                                                  'hot_product': hot_product})
 
 
@@ -105,7 +92,6 @@ def product(request, pk):
         'title': title,
         'products_menu': ProductCategory.objects.all(),
         'product': get_object_or_404(Product, pk=pk),
-        'basket': get_basket(request.user),
         "menu_links": menu_links,
     }
 
@@ -114,7 +100,5 @@ def product(request, pk):
 
 #контроллер страницы контактов
 def contact(request):
-    basket = get_basket(request.user)
 
-    return render(request, 'mainapp/contact.html', context={"menu_links": menu_links,
-                                                            'basket': basket})
+    return render(request, 'mainapp/contact.html', context={"menu_links": menu_links})
