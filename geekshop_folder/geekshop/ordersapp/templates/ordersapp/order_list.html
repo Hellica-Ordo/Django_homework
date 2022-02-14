@@ -1,8 +1,10 @@
 {% extends 'ordersapp/base.html' %}
 {% load static %}
-{% block title %}
-<title>Заказы</title>
-{% endblock %}
+<title>
+    {% block title %}
+        {{ page_title|capfirst }}
+    {% endblock %}
+   </title>
 {% block content %}
    <div class="h2 text-center head">
        Ваши заказы, 

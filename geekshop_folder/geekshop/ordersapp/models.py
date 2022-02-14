@@ -4,6 +4,15 @@ from django.conf import settings
 from mainapp.models import Product
 
 
+class OrderItemQuerySet(models.QuerySet):
+
+   def delete(self, *args, **kwargs):
+       for object in self:
+           object.product.quantity += object.quantity
+           object.product.save()
+       super(OrderItemQuerySet, self).delete(*args, **kwargs)
+
+
 class Order(models.Model):
     FORMING = 'FM'
     SENT_TO_PROCEED = 'STP'
@@ -70,6 +79,13 @@ class OrderItem(models.Model):
                                 on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='количество',
                                            default=0)
+    objects = OrderItemQuerySet.as_manager()
 
     def get_product_cost(self):
         return self.product.price * self.quantity
+
+    def get_item(self, *args, **kwargs):
+        return self.__class__.objects.get(*args, **kwargs)
+
+    # def get_item(pk):
+    #     return OrderItem.objects.get(pk=pk)

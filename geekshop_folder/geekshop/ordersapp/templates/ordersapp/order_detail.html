@@ -2,7 +2,7 @@
 {% load static %}
 {% load my_tags %}
 {% block title %}
-<title>Информация о заказе</title>
+    {{ page_title|capfirst }}
 {% endblock %}
 {% block content %}
    {% include 'ordersapp/includes/inc_order_summary.html' %}

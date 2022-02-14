@@ -11,6 +11,9 @@ from basketapp.models import Basket
 from ordersapp.models import Order, OrderItem
 from ordersapp.forms import OrderItemForm
 
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, pre_delete
+
 
 class OrderList(ListView):
    model = Order
@@ -18,6 +21,12 @@ class OrderList(ListView):
 
    def get_queryset(self):
        return Order.objects.filter(user=self.request.user)
+
+   def get_context_data(self, *, object_list=None, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['page_title'] = 'Заказы'
+    return context
+
 
 
 class OrderItemsCreate(CreateView):
@@ -30,6 +39,7 @@ class OrderItemsCreate(CreateView):
         data = super(OrderItemsCreate, self).get_context_data(**kwargs)
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
 
+
         if self.request.POST:
             formset = OrderFormSet(self.request.POST)
         else:
@@ -40,11 +50,13 @@ class OrderItemsCreate(CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = basket_items[num].product
                     form.initial['quantity'] = basket_items[num].quantity
+                    form.initial['price'] = basket_items[num].product.price
                 basket_items.delete()
             else:
                 formset = OrderFormSet()
 
         data['orderitems'] = formset
+        data['page_title'] = 'Создание заказа'
         return data
 
     def form_valid(self, form):
@@ -78,8 +90,17 @@ class OrderItemsUpdate(UpdateView):
         if self.request.POST:
             data['orderitems'] = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            data['orderitems'] = OrderFormSet(instance=self.object)
+            #data['orderitems'] = OrderFormSet(instance=self.object)
+            formset = OrderFormSet(instance=self.object)
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
+            data['orderitems'] = formset
+            data['page_title'] = 'Редактирование заказа'
         return data
+
+    def get_item(self, *args, **kwargs):
+        return self.objects.get(*args, **kwargs)
 
     def form_valid(self, form):
         context = self.get_context_data()
@@ -102,13 +123,18 @@ class OrderDelete(DeleteView):
     template_name = "ordersapp/order_confirm_delete.html"
     success_url = reverse_lazy('ordersapp:orders_list')
 
+    def get_context_data(self, **kwargs):
+        context = super(OrderDelete, self).get_context_data(**kwargs)
+        context['page_title'] = 'Удаление заказа'
+        return context
+
 
 class OrderRead(DetailView):
    model = Order
 
    def get_context_data(self, **kwargs):
        context = super(OrderRead, self).get_context_data(**kwargs)
-       context['title'] = 'Просмотр заказа'
+       context['page_title'] = 'Просмотр заказа'
        return context
 
 
@@ -118,3 +144,26 @@ def order_forming_complete(request, pk):
    order.save()
 
    return HttpResponseRedirect(reverse('ordersapp:orders_list'))
+
+# здесь вылетала ошибка с объектами потому, что в таком виде эта функция дёргает класс, а не непосредственно объект, но он-то не дёргается тем get_item, который с self.
+# get_item с конкретным аргументом (pk) на это работал, потому что конкретный аргумент. чтобы это пофиксить, в строке 158 уточняем аргумент для get_item (instance, pk=instance.pk),
+# и ещё вызываем метод __class__ у get_item
+# (если опять запутаешься - спроси Киху, попроси ещё раз объяснить)
+
+@receiver(pre_save, sender=OrderItem)
+def product_quantity_update_save(sender, update_fields, instance, **kwargs):
+   if update_fields is 'quantity' or 'product':
+       if instance.pk:
+           instance.product.quantity -= instance.quantity - \
+                                        sender.get_item(instance, pk=instance.pk).quantity
+       else:
+           instance.product.quantity -= instance.quantity
+       instance.product.save()
+
+
+@receiver(pre_delete, sender=OrderItem)
+def product_quantity_update_delete(sender, instance, **kwargs):
+   instance.product.quantity += instance.quantity
+   instance.product.save()
+
+
